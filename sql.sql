@@ -218,16 +218,28 @@ Select dbo.fn_CalculateAge('02.09.2011')
 
 Drop function dbo.fn_CalculateAge;
 
-Create Function fn_EmployeesByGender(@Gender nvarchar(10))
+Create Function fn_EmployeesByGender(@Gender nvarchar(10))--better performance, can be used in an update
 Returns Table
 As
 	return (Select * From Employee Where Gender = @Gender)
 
 Select * From dbo.fn_EmployeesByGender('Male')
 
+Create Function fn_EmployeesByGender2(@Gender nvarchar(10))--worse performance, canot be used in an update
+Returns @Table Table (ID int, Name nvarchar(20), Salary int, Gender nvarchar(20))
+As
+Begin
+	Insert Into @Table
+	Select * From Employee Where Gender = @Gender
+
+	Return
+End
+
+Select * From dbo.fn_EmployeesByGender2('Male')
+
 -- Function vs Stored procedure:
--- functions can be used inside a select
--- stored procedures cannot be used inside a select
+-- functions can be used inside a select/where
+-- stored procedures cannot be used inside a select/where
 
 -- (fucntioncannot return text, ntext, image, cursor and timestamp)
 
