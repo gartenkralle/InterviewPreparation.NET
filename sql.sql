@@ -246,3 +246,18 @@ Select Year(Getdate());--current year
 
 Select Datename(Month, Getdate());--current month as string
 Select Datename(Weekday, Getdate());--current weekday as string
+
+Select Datepart(Month, Getdate());--current month
+Select Datepart(Weekday, Getdate());--current weekday
+
+Select Dateadd(Day, 1, Getdate());--tomorrow
+Select Dateadd(Day, -1, Getdate());--yesterday
+
+Select Datediff(Day, '11.05.2019', '20.09.2019')--132 days
+Select Datediff(Month, '11.05.2019', '20.09.2019')--4 month
+
+
+-- Cast vs Convert
+Select Cast(Getdate() as nvarchar);--no style paramter
+Select Convert(nvarchar, Getdate(), 103);--optional styple parameter
+
