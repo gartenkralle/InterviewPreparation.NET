@@ -228,3 +228,21 @@ Select Space(5);--'     '
 Select Replace('hi@hello.com', '.com', '.net');--hi@hello.net
 
 Select Stuff('hi@hello.com', 2, 1, '***');--replace 'i' by '***'
+
+
+-- Date and time
+Select Getdate();
+Select Current_Timestamp;
+Select Sysdatetime();
+Select Sysdatetimeoffset();
+Select Getutcdate();
+
+Select Isdate('Hello')--0
+Select Isdate(Getdate())--1
+
+Select Day(Getdate());--current day
+Select Month(Getdate());--current month
+Select Year(Getdate());--current year
+
+Select Datename(Month, Getdate());--current month as string
+Select Datename(Weekday, Getdate());--current weekday as string
