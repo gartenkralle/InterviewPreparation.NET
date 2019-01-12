@@ -216,7 +216,7 @@ End
 
 Select dbo.fn_CalculateAge('02.09.2011')
 
-Drop function dbo.fn_CalculateAge;
+Drop Function dbo.fn_CalculateAge;
 
 Create Function fn_EmployeesByGender(@Gender nvarchar(10))--better performance, can be used in an update
 Returns Table
@@ -236,6 +236,12 @@ Begin
 End
 
 Select * From dbo.fn_EmployeesByGender2('Male')
+
+Create Function fn_EmployeesByGender(@Gender nvarchar(10))
+Returns Table
+With Schemabinding--Drop Table Employee not possible
+As
+	return (Select ID, Name, Salary, Gender From dbo.Employee Where Gender = @Gender)
 
 -- Function vs Stored procedure:
 -- functions can be used inside a select/where
@@ -321,5 +327,33 @@ Select ROUND(850.556, 2, 1);--850.550 (cut after second decimal place)
 Select ROUND(850.556, -2);--900.000
 
 
+-- local temporary table:
+-- only available in this session/context
+-- will be deleted when connection is closed
+-- should not be returned from stored procedures! (other context/session)
+Create Table #PersonDetails
+(
+	ID int, 
+	Name varchar(20)
+)
+
+Insert Into #PersonDetails Values(1, 'Mike')
+Insert Into #PersonDetails Values(2, 'John')
+
+Select * From #PersonDetails
 
 
+-- global temporary table:
+-- available in other session/context
+-- will be deleted when last connection is closed
+-- can be returned from stored procedures!
+Create Table ##PersonDetails
+(
+	ID int, 
+	Name varchar(20)
+)
+
+Insert Into ##PersonDetails Values(1, 'Mike')
+Insert Into ##PersonDetails Values(2, 'John')
+
+Select * From ##PersonDetails
