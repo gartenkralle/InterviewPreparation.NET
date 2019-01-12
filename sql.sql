@@ -177,16 +177,59 @@ Execute @EmployeeCount = spGetEmployeeCountByGender 'Male'
 Print @EmployeeCount;
 
 
--- Return				-- Output
+-- Return:				-- Output:
 -- only int				-- any datatype
 -- only one				-- multiple
 -- show success/failure -- any other function result
 
-
--- Stored Procedure
+-- Stored Procedure:
 -- reusable
 -- less network traffic
 -- avoid sql injection
+
+
+-- Function
+
+Create Function fn_CalculateAge(@DateOfBirth Date)
+Returns int
+As
+Begin
+	Declare @Age int;
+	
+	--do calculations based on parameters
+	Set @Age = 30
+
+	return @Age
+End
+
+Alter Function fn_CalculateAge(@DateOfBirth Date)
+Returns int
+As
+Begin
+	Declare @Age int;
+	
+	--do calculations based on parameters
+	Set @Age = 31
+
+	return @Age
+End
+
+Select dbo.fn_CalculateAge('02.09.2011')
+
+Drop function dbo.fn_CalculateAge;
+
+Create Function fn_EmployeesByGender(@Gender nvarchar(10))
+Returns Table
+As
+	return (Select * From Employee Where Gender = @Gender)
+
+Select * From dbo.fn_EmployeesByGender('Male')
+
+-- Function vs Stored procedure:
+-- functions can be used inside a select
+-- stored procedures cannot be used inside a select
+
+-- (fucntioncannot return text, ntext, image, cursor and timestamp)
 
 
 Select Ascii('A') --65
@@ -258,6 +301,13 @@ Select Datediff(Month, '11.05.2019', '20.09.2019')--4 month
 
 
 -- Cast vs Convert
-Select Cast(Getdate() as nvarchar);--no style paramter
-Select Convert(nvarchar, Getdate(), 103);--optional styple parameter
+Select Cast(Getdate() as nvarchar);--no style paramter, standardized function,
+Select Convert(nvarchar, Getdate(), 103);--optional styple parameter, microsoft specific
+
+Select ROUND(850.556, 2);--850.560 (round second decimal place)
+Select ROUND(850.556, 2, 1);--850.550 (cut after second decimal place)
+Select ROUND(850.556, -2);--900.000
+
+
+
 
