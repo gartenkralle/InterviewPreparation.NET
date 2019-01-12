@@ -1082,16 +1082,16 @@ namespace ConsoleApp
 
     class AccountManager
     {
-        public void Transfer(Account accountA, Account accountB, int amount)
+        public void Transfer(Account fromAccount, Account toAccount, int amount)
         {
-            lock (accountA)
+            lock (fromAccount)
             {
                 Thread.Sleep(1000);
 
-                lock (accountB)
+                lock (toAccount)
                 {
-                    accountA.Withdraw(amount);
-                    accountB.Deposit(amount);
+                    fromAccount.Withdraw(amount);
+                    toAccount.Deposit(amount);
                 }
             }
         }
@@ -1104,4 +1104,91 @@ namespace ConsoleApp
     }
 }
 
+
+/* Resolve Deadlock */
+// acquiring locks in a specific order
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ConsoleApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Account accountA = new Account(1, 1000);
+            Account accountB = new Account(2, 2000);
+
+            AccountManager accountManager1 = new AccountManager();
+            AccountManager accountManager2 = new AccountManager();
+
+            Task t1 = accountManager1.TransferAsync(accountA, accountB, 500);
+            Task t2 = accountManager2.TransferAsync(accountB, accountA, 1000);
+
+            t1.Wait();
+            t2.Wait();
+        }
+    }
+
+    class Account
+    {
+        public int ID { get; private set; }
+        private int balance;
+
+        public Account(int ID, int balance)
+        {
+            this.ID = ID;
+            this.balance = balance;
+        }
+
+        public void Deposit(int amount)
+        {
+            balance += amount;
+        }
+
+        public void Withdraw(int amount)
+        {
+            balance -= amount;
+        }
+    }
+
+    class AccountManager
+    {
+        public void Transfer(Account fromAccount, Account toAccount, int amount)
+        {
+            object lock1 = fromAccount;
+            object lock2 = toAccount;
+
+            if (fromAccount.ID < toAccount.ID)
+            {
+                object temp = lock1;
+                lock1 = lock2;
+                lock2 = temp;
+            }
+
+            lock (lock1)
+            {
+                Thread.Sleep(1000);
+
+                lock (lock2)
+                {
+                    fromAccount.Withdraw(amount);
+                    toAccount.Deposit(amount);
+                }
+            }
+        }
+
+        public async Task TransferAsync(Account accountA, Account accountB, int amount)
+        {
+            Task task = Task.Factory.StartNew(() => Transfer(accountA, accountB, amount));
+            await task;
+        }
+    }
+}
+
+
+// use Mutex class
+// use Montior.TryEnter method
 
