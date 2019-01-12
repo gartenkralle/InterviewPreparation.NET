@@ -1,0 +1,87 @@
+/* Random numbers */
+
+public class Program
+{
+    private static Random number = new Random(DateTime.Now.Millisecond);
+
+    /* Random numbers between 0...1 (exclusive 1) */
+    public static double random()
+    {
+        return (double)number.Next() / int.MaxValue;
+    }
+
+    /* Random numbers between minValue...maxValue (exclusive maxValue) */
+    public static double random(double minValue, double maxValue)
+    {
+        double span = maxValue - minValue;
+
+        return (random() * span) + minValue;
+    }
+
+    /* Random numbers between minValue...maxValue (inclusive maxValue) */
+    public static int random(int minValue, int maxValue)
+    {
+        return (int)random((double)minValue, maxValue + 1);
+    }
+}
+
+
+/* Lists and Arrays */
+
+       |  read  | insert/delete | search
+_______|________|_______________|______________________________
+Array  |  O(1)  |   O(n)        | O(n)     - unordered array
+       |        |               | O(lg(n)) - ordered array
+List   |  O(n)  |   O(1)        | O(n)     - unordered list
+       |        |               | O(lg(n)) - ordered skip list
+
+
+/* Stack */
+
+      |  push  |  pop
+______|________|________
+Stack |  O(1)  |  O(1)
+
+
+/* Hashtables */
+
+          |  read  | insert/delete | search
+__________|________|_______________|________
+Hashtable |  O(1)  |   O(1)        | O(1)     
+
+// useful for catching duplicates - O(n)
+
+
+/* Graphs */
+
+E - edge
+V - vertex
+d - degree of a vertex
+
+                 | memory usage | running time
+_________________|______________|__________________________________________
+Edge list        |   O(E)       |  O(E)             - unordered list
+                 |              |  O(lg(E))         - ordered skip list
+Adjacency matrix |   O(V²)      |  O(1)
+Adjacency list   |   O(V + E)   |  O(V + d)         - unordered list
+                 |              |  O(lg(V) + lg(d)) - 2x ordered skip list
+
+
+/* Breadth-first search (BFS) and Depth-first search (DFS) and Dijkstra */
+
+
+
+// BFS          - shortest path between A and B for unweighted graph
+// Dijkstra     - shortest path between A and B for weighted graph
+//              - weights must be positive
+// Bellman-Ford - weights can be negative
+
+
+/* Breadth-first search (BFS) vs. Depth-first search (DFS) */
+
+BFS // only if search node is near root node (otherwise space-complexity grows exponential)
+    // also used for unweighted graphs with cycles (depth -> infinity), shortest path between A and B
+    // optimal solution in graphs (shortest path)
+DFS // for general if depth is log(n) (balanced), no additional space
+    // non-optimal solution in graphs (not shortest path)
+    // optimal solution if balanced tree without duplicates is used

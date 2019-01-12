@@ -1,0 +1,29 @@
+ /* Shortcuts */
+
+F1                      // MSDN (to see inheritance hierarchy)
+Strg + I                // Incremental search
+Strg + Q                // Quick settings search
+Strg + K + D		    // Restore indentation
+Strg + K + C            // Comment
+Strg + K + U            // Uncomment
+Strg + Space            // Intellisense
+Alt + Shift + Enter     // Fullscreen
+Shift + F6              // Build current project
+F6                      // Build entire solution
+Strg + Space            // Auto completion
+Strg + Shift + Space    // Parameter tooltip
+Strg + .		        // Quick help
+F2                      // Rename
+Strg + F                // Search
+Strg + T                // Advanced search
+Strg + Shift + F	    // Search and replace
+Strg + M + L            // Collapse/Expand all (toggle)
+F12                     // Go to definition
+Strg + Alt + Space      // Re-Activate intelli sense selection
+Strg + K + X            // Code-Snipets
+Strg + W + J            // Objektkatalog (Esc - last view)
+
+
+/* Add additional watch window */
+
+Debuggen -> Fenster -> Überwachen

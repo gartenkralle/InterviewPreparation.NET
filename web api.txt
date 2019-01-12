@@ -1,0 +1,158 @@
+/* Basic */
+
+// POST - Create
+// GET  - Read
+// PUT  - Update
+// Delete - Delete
+
+
+/* REST Call */
+
+http://maps.googleapis.com/maps/api/geocode/json?address=chicago&sensor=false
+
+
+/* Tools */
+
+// - Fiddler (composer tab)
+// - Chrome with Postman
+// - https://apigee.com/console/
+
+
+/* SSL/HTTPS */
+
+// https://www.gogetssl.com/
+
+
+/* Web API vs. WCF */
+
+// WCF is protocol independent - you can have a single service with different (protocol) endpoints
+// WCF can support SOAP when adding a REST service
+
+// Any other case use Web API
+
+
+/* Rest service (server) */
+
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApplication1.Controllers
+{
+    [Route("api/[controller]")]
+    public class ValuesController : Controller
+    {
+        private static List<string> values = new List<string> { "value1", "value2" };
+
+        // GET api/values
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return values; 
+        }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return values[id];
+        }
+
+        // POST api/values
+        [HttpPost]
+        public void Post([FromBody]string value)
+        {
+            values.Add(value);
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody]string value)
+        {
+            values[id] = value;
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            values.RemoveAt(id);
+        }
+    }
+}
+
+
+
+/* REST request (client) */
+
+// Preccondition:
+// Nuget: System.Runtime.Serialization.Primitives
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
+using System.Threading.Tasks;
+
+namespace WebAPIClient
+{
+    class Program
+    {
+        public static void Main(String[] args)
+        {
+            IReadOnlyList<Repository> repositories = ProcessRepositories().Result;
+
+            foreach (Repository repo in repositories)
+                Console.WriteLine(repo.Name);
+        }
+
+        private static async Task<IReadOnlyList<Repository>> ProcessRepositories()
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Repository>));
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+            client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+
+            Task<Stream> streamTask = client.GetStreamAsync("https://api.github.com/orgs/dotnet/repos");
+            IReadOnlyList<Repository> repositories = serializer.ReadObject(await streamTask) as IReadOnlyList<Repository>;
+
+            return repositories;
+        }
+    }
+}
+
+
+using System.Runtime.Serialization;
+
+namespace WebAPIClient
+{
+    [DataContract(Name = "repo")]
+    public class Repository
+    {
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "billingPeriods")]
+        public ICollection<BillingPeriod> BillingPeriods { get; set; }
+    }
+}
+
+
+/* Convert REST Data members */
+
+// getting from server
+[DataMember(Name = "pushed_at")]
+private string JsonDate { get; set; }
+
+// offering to client
+[IgnoreDataMember]
+public DateTime LastPush
+{
+    get
+    {
+        return DateTime.ParseExact(JsonDate, "yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+    }
+}

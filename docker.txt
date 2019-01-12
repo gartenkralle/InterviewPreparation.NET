@@ -1,0 +1,27 @@
+docker --help
+docker COMMAND --help
+
+docker version
+docker info
+
+docker ps                                   // started containers
+docker ps -a                                // all containers (started + stopped)
+
+docker images                               // list all images
+
+docker pull jenkins                         // pull the image
+docker create --name jenkins -P jenkins     // create the container
+docker start jenkins                        // start the container
+
+docker run --name jenkins -P jenkins        // implicit docker pull + create + start + log output
+
+docker stop jenkins                         // stop the container
+docker kill jenkins                         // stop the container (forced)
+
+docker restart jenkins                      // restart the container (stop + start)
+
+docker container rm jenkins                 // remove the container
+docker container rm -f jenkins              // remove the container (implicit stop)
+
+docker rmi jenkins                          // remove image
+docker rmi -f jenkins                       // remove image (forced (stop and remove all containers connected to that image))
