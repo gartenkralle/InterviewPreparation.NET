@@ -1,0 +1,5 @@
+ /* Shortcuts */
+
+Strg + K + U                 // Select current line
+F5                           // Execute
+

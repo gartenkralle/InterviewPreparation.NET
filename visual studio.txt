@@ -27,3 +27,12 @@ Strg + W + J            // Objektkatalog (Esc - last view)
 /* Add additional watch window */
 
 Debuggen -> Fenster -> Überwachen
+
+
+// use var keyword followed by Strg + . to get concrete type very fast
+
+var genderGroups = departmentGroup.GroupBy(employee => employee.Gender);
+
+becomes to:
+
+IEnumerable<IGrouping<string, Employee>> genderGroups = departmentGroup.GroupBy(employee => employee.Gender);

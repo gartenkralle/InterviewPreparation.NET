@@ -230,7 +230,7 @@ List<Employee> employees = new List<Employee>
     new Employee(4, "Peter", "IT")
 };
 
-IEnumerable<IGrouping<string, Employee>> groups = employees.GroupBy(employee => employee.Department);
+IEnumerable<IGrouping<string, Employee>> groups = employees.GroupBy(employee => employee.Department); // 2 Groups
 
 foreach (IGrouping<string, Employee> group in groups)
 {
@@ -241,4 +241,74 @@ foreach (IGrouping<string, Employee> group in groups)
         Console.WriteLine(" " + employee.ID + " " + employee.Name);
     }
 }
+
+
+//GroupBy (multiple keys)
+public class Employee
+{
+    public Employee(int ID, string Name, string Department, string Gender)
+    {
+        this.ID = ID;
+        this.Name = Name;
+        this.Department = Department;
+        this.Gender = Gender;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public string Department { get; set; }
+    public string Gender { get; set; }
+}
+
+List<Employee> employees = new List<Employee>
+{
+    new Employee(1, "Sabine", "HR", "Female"),
+    new Employee(2, "Julia", "IT", "Female"),
+    new Employee(3, "John", "HR", "Male"),
+    new Employee(4, "Peter", "IT", "Male")
+};
+
+IEnumerable<IGrouping<string, Employee>> departmentGroups = employees.GroupBy(employee => employee.Department); 
+
+foreach (IGrouping<string, Employee> departmentGroup in departmentGroups)
+{
+    IEnumerable<IGrouping<string, Employee>> genderGroups = departmentGroup.GroupBy(employee => employee.Gender); // 2x2 Groups
+    Console.WriteLine(departmentGroup.Key);
+
+    foreach (IGrouping<string, Employee> genderGroup in genderGroups)
+    {
+        Console.WriteLine(" " + genderGroup.Key);
+
+        foreach (Employee employee in genderGroup)
+        {
+            Console.WriteLine("  " + employee.ID + " " + employee.Name);
+        }
+    }
+}
+
+
+//Element operators
+int first = numbers.First(); //if collection is empty exception is thrown
+int first = numbers.First(n => n % 2 == 0);
+
+int first = numbers.FirstOrDefault(); //if collection is empty NO exception is thrown
+int first = numbers.FirstOrDefault(n => n % 2 == 0);
+
+int last = numbers.Last(); //if collection is empty exception is thrown
+int last = numbers.Last(n => n % 2 == 0);
+
+int last = numbers.LastOrDefault(); //if collection is empty NO exception is thrown
+int last = numbers.LastOrDefault(n => n % 2 == 0);
+
+int result = numbers.ElementAt(index); //if collection is empty exception is thrown
+int result = numbers.ElementAtOrDefault(index); //if collection is empty NO exception is thrown
+
+int result = numbers.Single(); //if collection is empty OR has more than one element exception is thrown
+int result = numbers.Single(n => n % 2 == 0);
+
+int result = numbers.SingleOrDefault(); //if collection is empty OR has more than one element NO exception is thrown
+int result = numbers.SingleOrDefault(n => n % 2 == 0);
+
+IEnumerable<int> result = intCollection.DefaultIfEmpty(); //if collection is empty NO exception is thrown
+IEnumerable<int> result = intCollection.DefaultIfEmpty(1); //if collection is empty NO exception is thrown
 
