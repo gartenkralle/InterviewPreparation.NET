@@ -14,6 +14,16 @@
 
 
 
+// Linq to SQL Connection:
+
+DataClassesDataContext data = new DataClassesDataContext();
+System.Data.Linq.Table<Person> persons = data.Person;
+
+foreach(Person person in persons)
+{
+    Console.WriteLine(person.Name);
+}
+
 // Create own extension method:
 
 class Program
@@ -312,3 +322,5 @@ int result = numbers.SingleOrDefault(n => n % 2 == 0);
 IEnumerable<int> result = intCollection.DefaultIfEmpty(); //if collection is empty NO exception is thrown
 IEnumerable<int> result = intCollection.DefaultIfEmpty(1); //if collection is empty NO exception is thrown
 
+
+//Group Join
