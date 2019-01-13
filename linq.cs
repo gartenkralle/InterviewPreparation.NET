@@ -14,14 +14,7 @@
 
 
 
-// Syntax:
-
-int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-IEnumerable<int> evenNumbers = numbers.Where(number => number % 2 == 0);
-
-
-// Create extension method:
+// Create own extension method:
 
 class Program
 {
@@ -39,6 +32,7 @@ public static class StringHelper
     }
 }
 
+// Predefined extension methods in System.Linq namespace
 
 // Aggregate functions:
 
@@ -55,3 +49,6 @@ string singleString = stringCollection.Aggregate((a, b) => a + " " + b); // stri
 
 int product = intCollection.Aggregate((a, b) => a * b); // build product of entire collection entries
 
+// Where function (restrictions):
+
+IEnumerable<int> evenNumbers = intCollection.Where(number => number % 2 == 0);
