@@ -144,17 +144,18 @@ IEnumerable<int> ints4 = intCollection.TakeWhile(x => x < 6); // 1, 2, 3, 4, 5
 IEnumerable<int> ints5 = intCollection.SkipWhile(x => x < 6); // 6, 7, 8, 9, 10
 
 // Lazy/Deferred execution functions:
-// Select, Where, Take, Skip
-// Each function which returns IEnumerable interface
+// Select, Where, Take, Skip, ToLookup, Cast, OfType
+// Each function which returns an interface collection
 
 // Eager execution functions:
 // Count, Average, Min, Max, ToList, ToArray, ToDictionary
-// Each function which NOT returns IEnumerable interface
+// Each function which NOT returns an interface collection
 
 
 //ToDictionary
 Dictionary<int, Employee> dictionary1 = employees.ToDictionary(employee => employee.ID);
 Dictionary<int, string> dictionary2 = employees.ToDictionary(employee => employee.ID, employee => employee.Name);
+
 
 //ToLookup (data structure which can contain duplicate keys)
 ILookup<int, Employee> lookup1 = employees.ToLookup(employee => employee.ID);
@@ -181,4 +182,21 @@ foreach (IGrouping<int, string> group in lookup2)
         Console.WriteLine(" " + name);
     }
 }
+
+
+// Cast (if element cannot be converted an exception is thrown)
+List<object> intCollection = new List<object> { 1, 2, 3, "exception" };
+
+IEnumerable<int> ints = intCollection.Cast<int>();
+
+foreach (long number in ints)
+    Console.WriteLine(number);
+
+// OfType (if element cannot be converted the element is skipped, works as a filter)
+List<object> intCollection = new List<object> { 1, 2, 3, "no exception" };
+
+IEnumerable<int> ints = intCollection.OfType<int>();
+
+foreach (long number in ints)
+    Console.WriteLine(number);
 
