@@ -148,5 +148,37 @@ IEnumerable<int> ints5 = intCollection.SkipWhile(x => x < 6); // 6, 7, 8, 9, 10
 // Each function which returns IEnumerable interface
 
 // Eager execution functions:
-// Count, Average, Min, Max, ToList
+// Count, Average, Min, Max, ToList, ToArray, ToDictionary
 // Each function which NOT returns IEnumerable interface
+
+
+//ToDictionary
+Dictionary<int, Employee> dictionary1 = employees.ToDictionary(employee => employee.ID);
+Dictionary<int, string> dictionary2 = employees.ToDictionary(employee => employee.ID, employee => employee.Name);
+
+//ToLookup (data structure which can contain duplicate keys)
+ILookup<int, Employee> lookup1 = employees.ToLookup(employee => employee.ID);
+
+foreach (IGrouping<int, Employee> group in lookup1)
+{
+    Console.WriteLine(group.Key);
+
+    foreach (Employee employee in group)
+    {
+        Console.WriteLine(" " + employee.Name);
+    }
+}
+
+
+ILookup<int, string> lookup2 = employees.ToLookup(employee => employee.ID, employee => employee.Name);
+
+foreach (IGrouping<int, string> group in lookup2)
+{
+    Console.WriteLine(group.Key);
+
+    foreach (string name in group)
+    {
+        Console.WriteLine(" " + name);
+    }
+}
+
