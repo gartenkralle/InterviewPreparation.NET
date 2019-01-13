@@ -200,3 +200,43 @@ IEnumerable<int> ints = intCollection.OfType<int>();
 foreach (long number in ints)
     Console.WriteLine(number);
 
+
+//AsEnumerable (tranfers all data to client side, all subsequent operations will be executed at client side)
+IEnumerable<Employee> employeeCollection = employees.AsEnumerable();
+
+
+//GroupBy
+public class Employee
+{
+    public Employee(int ID, string Name, string Department)
+    {
+        this.ID = ID;
+        this.Name = Name;
+        this.Department = Department;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public string Department { get; set; }
+}
+
+List<Employee> employees = new List<Employee>
+{
+    new Employee(1, "Sabine", "HR"),
+    new Employee(2, "Heinz", "HR"),
+    new Employee(3, "John", "IT"),
+    new Employee(4, "Peter", "IT")
+};
+
+IEnumerable<IGrouping<string, Employee>> groups = employees.GroupBy(employee => employee.Department);
+
+foreach (IGrouping<string, Employee> group in groups)
+{
+    Console.WriteLine(group.Key);
+
+    foreach (Employee employee in group)
+    {
+        Console.WriteLine(" " + employee.ID + " " + employee.Name);
+    }
+}
+
