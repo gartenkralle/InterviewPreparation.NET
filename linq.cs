@@ -99,9 +99,36 @@ public class Employee
 
 List<Employee> employees = new List<Employee>
 {
-    new Employee(1, "Heinz", new string[]{"Football", "TV" }),
-    new Employee(2, "Sabine", new string[]{"Gardening", "Traveling" })
+    new Employee(1, "Sabine", new string[]{"Football", "TV" }),
+    new Employee(2, "Heinz", new string[]{"Gardening", "Traveling" })
 };
 
-var employeesHobbies1 = employees.Select(employee => new { employee.Name, employee.Hobbies }); // 2 rows
-var employeesHobbies2 = employees.SelectMany(employee => employee.Hobbies, (employee, hobby)  => new { employee.Name, hobby }); // 4 rows
+var employeesHobbies1 = employees.Select(employee => new { employee.Name, employee.Hobbies }); 
+// 2 rows
+// Hobbies = IEnumerable<string[]>
+// 2 nested for loops are needed to iterate over all hobbies
+
+var employeesHobbies2 = employees.SelectMany(employee => employee.Hobbies, (employee, hobby)  => new { employee.Name, hobby });
+// 4 rows
+// Hobies = IEnumerable<string>
+// 1 for loop is needed to iterate over all hobbies (less complex code)
+
+
+//Ordering functions:
+
+//Primary sort
+IEnumerable<Employee> orderedEmpoyees1 = employees.OrderBy(employee => employee.Name);
+IEnumerable<Employee> orderedEmpoyees2 = employees.OrderByDescending(employee => employee.Name);
+
+//Secondary sort
+IEnumerable<Employee> orderedEmpoyees1 = employees.OrderBy(employee => employee.Name).ThenBy(employee => employee.ID);
+IEnumerable<Employee> orderedEmpoyees2 = employees.OrderBy(employee => employee.Name).ThenByDescending(employee => employee.ID);
+
+//ThenBy can be chained, OrderBy not
+//ThenBy(...).ThenBy(...).etc
+
+//Reverse
+string[] alphabet = new string[] { "A", "B", "C" };
+
+IEnumerable<string> arr = alphabet.Reverse(); //C B A
+
