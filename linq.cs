@@ -66,6 +66,7 @@ public class Employee
 
     public int ID { get; set; }
     public string Name { get; set; }
+    public int Salary { get; set; }
 }
 
 List<Employee> employees = new List<Employee>
@@ -75,4 +76,6 @@ List<Employee> employees = new List<Employee>
 };
 
 IEnumerable<string> employeeNames = employees.Select(x => x.Name); // Select only name column
+
+var employeeNames = employees.Select(x => new { ID = x.ID, Name = x.Name }); // Select multiple columns with anonymous type
 
