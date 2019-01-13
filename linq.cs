@@ -143,3 +143,10 @@ IEnumerable<int> ints3 = intCollection.Skip(3).Take(3); // 4, 5, 6
 IEnumerable<int> ints4 = intCollection.TakeWhile(x => x < 6); // 1, 2, 3, 4, 5
 IEnumerable<int> ints5 = intCollection.SkipWhile(x => x < 6); // 6, 7, 8, 9, 10
 
+// Lazy/Deferred execution functions:
+// Select, Where, Take, Skip
+// Each function which returns IEnumerable interface
+
+// Eager execution functions:
+// Count, Average, Min, Max, ToList
+// Each function which NOT returns IEnumerable interface
