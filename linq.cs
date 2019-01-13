@@ -132,3 +132,14 @@ string[] alphabet = new string[] { "A", "B", "C" };
 
 IEnumerable<string> arr = alphabet.Reverse(); //C B A
 
+
+//Partitioning functions:
+int[] intCollection = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+IEnumerable<int> ints1 = intCollection.Take(3); // 1, 2, 3
+IEnumerable<int> ints2 = intCollection.Skip(3); // 4, 5, 6, 7, 8, 9, 10
+IEnumerable<int> ints3 = intCollection.Skip(3).Take(3); // 4, 5, 6
+
+IEnumerable<int> ints4 = intCollection.TakeWhile(x => x < 6); // 1, 2, 3, 4, 5
+IEnumerable<int> ints5 = intCollection.SkipWhile(x => x < 6); // 6, 7, 8, 9, 10
+
