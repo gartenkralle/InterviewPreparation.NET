@@ -203,6 +203,8 @@ foreach (long number in ints)
 
 //AsEnumerable (tranfers all data to client side, all subsequent operations will be executed at client side)
 IEnumerable<Employee> employeeCollection = employees.AsEnumerable();
+//Time advantage: if table is small AND there are many requests for this table
+//Time disadvantag: if table is big AND there are only few requests which operate on a small subset of the table
 
 
 //GroupBy
