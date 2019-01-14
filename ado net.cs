@@ -53,6 +53,7 @@ sqlCommand.Parameters.AddWithValue("@Name", TextBox1.Text + "%");
 
 
 //Calling stored procedure (which has 4 parameters, 3 input parameters, 1 output parameter)
+//requires an active and open connection to the data source
 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     SqlCommand sqlCommand = new SqlCommand("spAddEmployee", sqlConnection);
@@ -72,6 +73,32 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     sqlCommand.ExecuteNonQuery();
 
     string employeeID = outputParameter.Value.ToString();
+}
+
+//Calling stored procedure (which has 4 parameters, 3 input parameters, 1 output parameter)
+//requires NO active and open connection to the data source
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("spAddEmployee", sqlConnection);
+    sqlDataAdapter.SelectCommand.CommandType = System.Data.CommandType.StoredProcedure;
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Name", txtEmpoyeeName.Text);
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Gender", ddlEmpoyeeGender.SelectedValue);
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Salary", txtEmpoyeeSalary.Text);
+
+    SqlParameter outputParameter = new SqlParameter();
+    outputParameter.ParameterName = "@EmployeeID";
+    outputParameter.SqlDbType = System.Data.SqlDbType.Int;
+    outputParameter.Direction = System.Data.ParameterDirection.Output;
+
+    sqlDataAdapter.SelectCommand.Parameters.Add(outputParameter);
+
+    DataSet dataSet = new DataSet();
+    sqlDataAdapter.Fill(dataSet);
+
+    dataSet.Tables[0].TableName = "Employees";
+
+    GridView1.DataSource = dataSet.Tables["Employees"];
+    GridView1.DataBind();
 }
 
 //SqlDataReader
@@ -102,9 +129,10 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 }
 
 //SqlDataReader (read multiple tables)
+//requires an active and open connection to the data source
 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
-    SqlCommand sqlCommand = new SqlCommand("Select * From Employee; Select * From Person", sqlConnection);
+    SqlCommand sqlCommand = new SqlCommand("Select * From Employee; Select * From Department", sqlConnection);
 
     sqlConnection.Open();
 
@@ -147,3 +175,52 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     GridView2.DataBind();
 }
 
+//SqlDataAdapter
+//SqlDataAdapter requires NO active and open connection to the data source
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("Select * From Employee; Select * From Department", sqlConnection);
+
+    sqlConnection.Open();
+
+    DataSet dataSet = new DataSet();
+    sqlDataAdapter.Fill(dataSet);
+
+    dataSet.Tables[0].TableName = "Employees";
+    dataSet.Tables[1].TableName = "Departments";
+
+    GridView1.DataSource = dataSet.Tables["Employees"];
+    GridView1.DataBind();
+
+    GridView2.DataSource = dataSet.Tables["Departments"];
+    GridView2.DataBind();
+}
+
+
+//Caching a DataSet
+if (Cache["Employees"] == null)
+{
+    string connectionString = "data source=.; database=Sample; integrated security=SSPI";
+
+    using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+    {
+        SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("Select * From Employee", sqlConnection);
+
+        sqlConnection.Open();
+
+        DataSet dataSet = new DataSet();
+        sqlDataAdapter.Fill(dataSet);
+
+        dataSet.Tables[0].TableName = "Employees";
+
+        Cache["Employees"] = dataSet.Tables["Employees"];
+
+        GridView1.DataSource = dataSet.Tables["Employees"];
+        GridView1.DataBind();
+    }
+}
+else
+{
+    GridView1.DataSource = (DataTable)Cache["Employees"];
+    GridView1.DataBind();
+}
