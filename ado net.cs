@@ -43,10 +43,33 @@ int affectedRowsCount = sqlCommand.ExecuteNonQuery();
 
 
 //SQL Injection
-string name = "John; Delete from Employee; --" //given by user input
+string name = "John; Delete from Employee; --" //this user input will clear the employee table
 string command = "Select * from Employee where Name like '" + name "%'";
 
 //Prevent SQL Injection (parameterized query)
 string command = "Select * from Employee where Name like @Name";
-sqlCommand.Parameters.AddWithValue("@Name", TextBox1.Text);
+sqlCommand.Parameters.AddWithValue("@Name", TextBox1.Text + "%");
+
+
+//Calling stored procedure (which has 4 parameters, 3 input parameters, 1 output parameter)
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    SqlCommand sqlCommand = new SqlCommand("spAddEmployee", sqlConnection);
+    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+    sqlCommand.Parameters.AddWithValue("@Name", txtEmpoyeeName.Text);
+    sqlCommand.Parameters.AddWithValue("@Gender", ddlEmpoyeeGender.SelectedValue);
+    sqlCommand.Parameters.AddWithValue("@Salary", txtEmpoyeeSalary.Text);
+
+    SqlParameter outputParameter = new SqlParameter();
+    outputParameter.ParameterName = "@EmployeeID";
+    outputParameter.SqlDbType = System.Data.SqlDbType.Int;
+    outputParameter.Direction = System.Data.ParameterDirection.Output;
+
+    sqlCommand.Parameters.Add(outputParameter);
+
+    sqlConnection.Open();
+    sqlCommand.ExecuteNonQuery();
+
+    string employeeID = outputParameter.Value.ToString();
+}
 
