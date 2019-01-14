@@ -504,3 +504,40 @@ public class Employee
 //Anonymous Types override Equals and GetHashCode internally
 var distinctEmployees = employeeCollection.Select(employee => new { employee.ID, employee.Name }).Distinct();
 
+//Union
+int[] intCollection1 = { 1, 2, 3 };
+int[] intCollection2 = { 2, 3, 4 };
+
+IEnumerable<int> distinctUniontInts = intCollection1.Union(intCollection2); //1, 2, 3, 4
+
+//Data
+List<Employee> employeeCollection1 = new List<Employee>
+{
+    new Employee(1, "John"),
+    new Employee(1, "Sarah"),
+};
+
+List<Employee> employeeCollection2 = new List<Employee>
+{
+    new Employee(1, "John"),
+    new Employee(1, "Peter"),
+};
+
+//Union
+var distinctUnion = // 3 Employees
+    employeeCollection1.Select(employee => new { employee.ID, employee.Name }).
+    Union
+    (employeeCollection2.Select(employee => new { employee.ID, employee.Name }));
+
+//Intersect
+var intersect = // 1 Employee (John)
+    employeeCollection1.Select(employee => new { employee.ID, employee.Name }).
+    Intersect
+    (employeeCollection2.Select(employee => new { employee.ID, employee.Name }));
+
+//Except
+var except = // 1 Employee (Sarah)
+    employeeCollection1.Select(employee => new { employee.ID, employee.Name }).
+    Except
+    (employeeCollection2.Select(employee => new { employee.ID, employee.Name }));
+
