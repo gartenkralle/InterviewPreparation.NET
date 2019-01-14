@@ -378,6 +378,33 @@ foreach(var employeesByDepartment in employeesByDepartmentCollection)
 
     foreach(Employee employee in employeesByDepartment.employees)
     {
-        Console.WriteLine(employee.Name);
+        Console.WriteLine(" " + employee.Name);
     }
+}
+
+//Inner Join
+List<Employee> employeeCollection = new List<Employee>
+{
+    new Employee(1, "Sabine", "Female", 1),
+    new Employee(2, "Julia", "Female", 1),
+    new Employee(3, "John", "Male", 2),
+    new Employee(4, "Peter", "Male", 99)
+};
+
+List<Department> departmentCollection = new List<Department>
+{
+    new Department(1, "HR"),
+    new Department(2, "IT")
+};
+
+var employeeDepartmentCollection = departmentCollection.Join(
+    employeeCollection,
+    department => department.ID,
+    employee => employee.DepartmentID,
+    (department, employee) => new { department, employee });
+
+foreach (var employeeDepartment in employeeDepartmentCollection)
+{
+    Console.WriteLine(employeeDepartment.department.Name);
+    Console.WriteLine(employeeDepartment.employee.Name);
 }
