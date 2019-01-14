@@ -20,6 +20,7 @@ protected void Page_Load(object sender, EventArgs e)
         SqlCommand sqlCommand = new SqlCommand("Select * From Employee", sqlConnection);
 
         sqlConnection.Open();
+        
         SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
         GridView1.DataSource = sqlDataReader;
@@ -71,5 +72,32 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     sqlCommand.ExecuteNonQuery();
 
     string employeeID = outputParameter.Value.ToString();
+}
+
+//SqlDataReader
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    SqlCommand sqlCommand = new SqlCommand("Select * From Employee", sqlConnection);
+
+    sqlConnection.Open();
+
+    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+    DataTable table = new DataTable();
+    table.Columns.Add("ID");
+    table.Columns.Add("Name");
+
+    while (sqlDataReader.Read())
+    {
+        DataRow dataRow = table.NewRow();
+
+        dataRow["ID"] = sqlDataReader["ID"];
+        dataRow["Name"] = sqlDataReader["Name"];
+
+        table.Rows.Add(dataRow);
+    }
+
+    GridView1.DataSource = table;
+    GridView1.DataBind();
 }
 
