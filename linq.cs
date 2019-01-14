@@ -324,3 +324,60 @@ IEnumerable<int> result = intCollection.DefaultIfEmpty(1); //if collection is em
 
 
 //Group Join
+public class Employee
+{
+    public Employee(int ID, string Name, string Gender, int DepartmentID)
+    {
+        this.ID = ID;
+        this.Name = Name;
+        this.DepartmentID = DepartmentID;
+        this.Gender = Gender;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public int DepartmentID { get; set; }
+    public string Gender { get; set; }
+}
+
+public class Department
+{
+    public Department(int ID, string Name)
+    {
+        this.ID = ID;
+        this.Name = Name;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+}
+
+List<Employee> employeeCollection = new List<Employee>
+{
+    new Employee(1, "Sabine", "Female", 1),
+    new Employee(2, "Julia", "Female", 1),
+    new Employee(3, "John", "Male", 2),
+    new Employee(4, "Peter", "Male", 2)
+};
+
+List<Department> departmentCollection = new List<Department>
+{
+    new Department(1, "HR"),
+    new Department(2, "IT")
+};
+
+var employeesByDepartmentCollection = departmentCollection.GroupJoin(
+    employeeCollection, 
+    department => department.ID, 
+    employee => employee.DepartmentID, 
+    (department, employees) => new { department, employees });
+
+foreach(var employeesByDepartment in employeesByDepartmentCollection)
+{
+    Console.WriteLine(employeesByDepartment.department.Name);
+
+    foreach(Employee employee in employeesByDepartment.employees)
+    {
+        Console.WriteLine(employee.Name);
+    }
+}
