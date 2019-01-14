@@ -357,3 +357,4 @@ Insert Into ##PersonDetails Values(1, 'Mike')
 Insert Into ##PersonDetails Values(2, 'John')
 
 Select * From ##PersonDetails
+
