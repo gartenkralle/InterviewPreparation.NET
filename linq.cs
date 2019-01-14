@@ -423,3 +423,84 @@ foreach (var employeeDepartment in employeesDepartmentsCollection)
     Console.WriteLine(employeeDepartment.employee.Name);
 }
 
+//Distinct
+string[] continents = { "USA", "usa" };
+
+IEnumerable<string> distinctContinents = continents.Distinct(StringComparer.OrdinalIgnoreCase); //"USA"
+
+//Data
+List<Employee> employeeCollection = new List<Employee>
+{
+    new Employee(1, "John"),
+    new Employee(1, "John"),
+};
+
+//Distinct with reference types (1)
+public class Employee
+{
+    public Employee(int ID, string Name)
+    {
+        this.ID = ID;
+        this.Name = Name;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+}
+
+public class EmployeeComparer : IEqualityComparer<Employee>
+{
+    public bool Equals(Employee x, Employee y)
+    {
+        return (x.ID == y.ID) && (x.Name == y.Name);
+    }
+
+    public int GetHashCode(Employee obj)
+    {
+        return obj.ID.GetHashCode() ^ obj.Name.GetHashCode();
+    }
+}
+
+IEnumerable<Employee> distinctEmployees = employeeCollection.Distinct(new EmployeeComparer());
+
+//Distinct with reference types (2)
+public class Employee
+{
+    public Employee(int ID, string Name)
+    {
+        this.ID = ID;
+        this.Name = Name;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return (((Employee)obj).ID == ID) && (((Employee)obj).Name == Name);
+    }
+
+    public override int GetHashCode()
+    {
+        return ID.GetHashCode() ^ Name.GetHashCode();
+    }
+}
+
+IEnumerable<Employee> distinctEmployees = employeeCollection.Distinct();
+
+//Distinct with reference types (3)
+public class Employee
+{
+    public Employee(int ID, string Name)
+    {
+        this.ID = ID;
+        this.Name = Name;
+    }
+
+    public int ID { get; set; }
+    public string Name { get; set; }
+}
+
+//Anonymous Types override Equals and GetHashCode internally
+var distinctEmployees = employeeCollection.Select(employee => new { employee.ID, employee.Name }).Distinct();
+
