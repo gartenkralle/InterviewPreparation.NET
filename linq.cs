@@ -323,7 +323,7 @@ IEnumerable<int> result = intCollection.DefaultIfEmpty(); //if collection is emp
 IEnumerable<int> result = intCollection.DefaultIfEmpty(1); //if collection is empty NO exception is thrown
 
 
-//Group Join = Left Join || Right Join
+//Data structure + data for following joins
 public class Employee
 {
     public Employee(int ID, string Name, string Gender, int DepartmentID)
@@ -357,7 +357,7 @@ List<Employee> employeeCollection = new List<Employee>
     new Employee(1, "Sabine", "Female", 1),
     new Employee(2, "Julia", "Female", 1),
     new Employee(3, "John", "Male", 2),
-    new Employee(4, "Peter", "Male", 2)
+    new Employee(4, "Peter", "Male", 99)
 };
 
 List<Department> departmentCollection = new List<Department>
@@ -366,6 +366,20 @@ List<Department> departmentCollection = new List<Department>
     new Department(2, "IT")
 };
 
+//Join = Inner Join
+var employeeDepartmentCollection = departmentCollection.Join(
+    employeeCollection,
+    department => department.ID,
+    employee => employee.DepartmentID,
+    (department, employee) => new { department, employee });
+
+foreach (var employeeDepartment in employeeDepartmentCollection)
+{
+    Console.WriteLine(employeeDepartment.department.Name);
+    Console.WriteLine(employeeDepartment.employee.Name);
+}
+
+//Group Join = Left Join || Right Join
 var employeesByDepartmentCollection = departmentCollection.GroupJoin(
     employeeCollection, 
     department => department.ID, 
@@ -382,29 +396,30 @@ foreach(var employeesByDepartment in employeesByDepartmentCollection)
     }
 }
 
-//Join = Inner Join
-List<Employee> employeeCollection = new List<Employee>
-{
-    new Employee(1, "Sabine", "Female", 1),
-    new Employee(2, "Julia", "Female", 1),
-    new Employee(3, "John", "Male", 2),
-    new Employee(4, "Peter", "Male", 99)
-};
+//Full Join
+//Left Join UNION Right Join - Inner Join
 
-List<Department> departmentCollection = new List<Department>
-{
-    new Department(1, "HR"),
-    new Department(2, "IT")
-};
-
-var employeeDepartmentCollection = departmentCollection.Join(
-    employeeCollection,
-    department => department.ID,
-    employee => employee.DepartmentID,
+//Cross Join with SelectMany
+var employeesDepartmentsCollection = departmentCollection.SelectMany(
+    department => employeeCollection,
     (department, employee) => new { department, employee });
 
-foreach (var employeeDepartment in employeeDepartmentCollection)
+foreach (var employeeDepartment in employeesDepartmentsCollection)
 {
     Console.WriteLine(employeeDepartment.department.Name);
     Console.WriteLine(employeeDepartment.employee.Name);
 }
+
+//Cross Join with Join
+var employeesDepartmentsCollection = departmentCollection.Join(
+    employeeCollection,
+    department => true,
+    employee => true,
+    (department, employee) => new { department, employee });
+
+foreach (var employeeDepartment in employeesDepartmentsCollection)
+{
+    Console.WriteLine(employeeDepartment.department.Name);
+    Console.WriteLine(employeeDepartment.employee.Name);
+}
+
