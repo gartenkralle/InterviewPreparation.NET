@@ -541,3 +541,13 @@ var except = // 1 Employee (Sarah)
     Except
     (employeeCollection2.Select(employee => new { employee.ID, employee.Name }));
 
+
+//Range
+IEnumerable<int> intCollection = Enumerable.Range(1, 10).Where(x => x % 2 == 0); //2, 4, 6, 8, 10
+
+//Repeat
+IEnumerable<string> stringCollection = Enumerable.Repeat("Hello", 3); //Hello, Hello, Hello
+
+//Empty (use empty function instead of null to prevent NullReference Exceptions while accessing)
+IEnumerable<string> ints = Enumerable.Empty<string>(); //Empty collection
+
