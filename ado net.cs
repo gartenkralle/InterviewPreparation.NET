@@ -83,21 +83,67 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 
     SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
 
-    DataTable table = new DataTable();
-    table.Columns.Add("ID");
-    table.Columns.Add("Name");
+    DataTable dataTable = new DataTable();
+    dataTable.Columns.Add("ID");
+    dataTable.Columns.Add("Name");
 
-    while (sqlDataReader.Read())
+    while (sqlDataReader.Read()) //Switch to next row
     {
-        DataRow dataRow = table.NewRow();
+        DataRow dataRow = dataTable.NewRow();
 
         dataRow["ID"] = sqlDataReader["ID"];
         dataRow["Name"] = sqlDataReader["Name"];
 
-        table.Rows.Add(dataRow);
+        dataTable.Rows.Add(dataRow);
     }
 
-    GridView1.DataSource = table;
+    GridView1.DataSource = dataTable;
     GridView1.DataBind();
+}
+
+//SqlDataReader (read multiple tables)
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    SqlCommand sqlCommand = new SqlCommand("Select * From Employee; Select * From Person", sqlConnection);
+
+    sqlConnection.Open();
+
+    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+
+    DataTable dataTable1 = new DataTable();
+    dataTable1.Columns.Add("ID");
+    dataTable1.Columns.Add("Name");
+
+    while (sqlDataReader.Read())
+    {
+        DataRow dataRow = dataTable1.NewRow();
+
+        dataRow["ID"] = sqlDataReader["ID"];
+        dataRow["Name"] = sqlDataReader["Name"];
+
+        dataTable1.Rows.Add(dataRow);
+    }
+
+    GridView1.DataSource = dataTable1;
+    GridView1.DataBind();
+
+    sqlDataReader.NextResult(); //Switch to next table
+
+    DataTable dataTable2 = new DataTable();
+    dataTable2.Columns.Add("ID");
+    dataTable2.Columns.Add("Name");
+
+    while (sqlDataReader.Read())
+    {
+        DataRow dataRow = dataTable2.NewRow();
+
+        dataRow["ID"] = sqlDataReader["ID"];
+        dataRow["Name"] = sqlDataReader["Name"];
+
+        dataTable2.Rows.Add(dataRow);
+    }
+
+    GridView2.DataSource = dataTable2;
+    GridView2.DataBind();
 }
 
