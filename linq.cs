@@ -551,3 +551,43 @@ IEnumerable<string> stringCollection = Enumerable.Repeat("Hello", 3); //Hello, H
 //Empty (use empty function instead of null to prevent NullReference Exceptions while accessing)
 IEnumerable<string> ints = Enumerable.Empty<string>(); //Empty collection
 
+//Concat
+int[] intCollection1 = { 1, 2, 3 };
+int[] intCollection2 = { 2, 3, 4 };
+
+IEnumerable<int> result = intCollection1.Concat(intCollection2); //1, 2, 3, 2, 3, 4
+
+//Sequence Equal
+int[] intCollection1 = { 1, 2, 3 };
+int[] intCollection2 = { 1, 2, 3 };
+
+bool result = intCollection1.SequenceEqual(intCollection2); // True
+
+int[] intCollection1 = { 1, 2, 3 };
+int[] intCollection2 = { 2, 3, 4 };
+
+bool result = intCollection1.SequenceEqual(intCollection2); // False
+
+// If you compare reference Types you need Equals and GetHashCode to be implemented via
+// 1. implement IEqualityComparer or
+// 2. implement Equals and GetHashCode directly in the reference type or
+// 3. use a select with anonymous type to internally create Equals and GetHashCode implementations
+
+
+//All
+int[] intCollection1 = { 1, 2, 3, 4, 5 };
+
+bool result = intCollection1.All(x => x < 10); //true
+
+//Any
+int[] intCollection1 = { 1, 2, 3, 4, 5 };
+
+bool result = intCollection1.Any(x => x < 2); //true
+
+//Contains
+int[] intCollection1 = { 1, 2, 3, 4, 5 };
+
+bool result = intCollection1.Contains(3); //true
+
+//Contains has optional parameter IEqualityComparer
+
