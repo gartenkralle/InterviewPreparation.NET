@@ -44,5 +44,9 @@ int affectedRowsCount = sqlCommand.ExecuteNonQuery();
 
 //SQL Injection
 string name = "John; Delete from Employee; --" //given by user input
-string command = "Select * from Employee where Name like " + name;
+string command = "Select * from Employee where Name like '" + name "%'";
+
+//Prevent SQL Injection (parameterized query)
+string command = "Select * from Employee where Name like @Name";
+sqlCommand.Parameters.AddWithValue("@Name", TextBox1.Text);
 
