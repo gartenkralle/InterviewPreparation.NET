@@ -323,7 +323,7 @@ IEnumerable<int> result = intCollection.DefaultIfEmpty(); //if collection is emp
 IEnumerable<int> result = intCollection.DefaultIfEmpty(1); //if collection is empty NO exception is thrown
 
 
-//Group Join
+//Group Join = Left Join || Right Join
 public class Employee
 {
     public Employee(int ID, string Name, string Gender, int DepartmentID)
@@ -382,7 +382,7 @@ foreach(var employeesByDepartment in employeesByDepartmentCollection)
     }
 }
 
-//Inner Join
+//Join = Inner Join
 List<Employee> employeeCollection = new List<Employee>
 {
     new Employee(1, "Sabine", "Female", 1),
