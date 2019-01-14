@@ -1,3 +1,6 @@
+//ADO.NET
+//Abstraction layer to interact with data source like database or xml file.
+
 //First Example
 
 protected void Page_Load(object sender, EventArgs e)
