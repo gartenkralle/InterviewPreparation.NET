@@ -41,3 +41,8 @@ int rowCount = (int)sqlCommand.ExecuteScalar();
 //Insert, Update, Delete
 int affectedRowsCount = sqlCommand.ExecuteNonQuery();
 
+
+//SQL Injection
+string name = "John; Delete from Employee; --" //given by user input
+string command = "Select * from Employee where Name like " + name;
+
