@@ -10,8 +10,8 @@
 // linq to twitter, linq to amazon, linq to google
 
 
-// Disadvantages:
-
+// Useful tool:
+// LINQPad 4
 
 
 // Linq to SQL Connection:
