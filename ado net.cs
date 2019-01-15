@@ -58,9 +58,9 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     SqlCommand sqlCommand = new SqlCommand("spAddEmployee", sqlConnection);
     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-    sqlCommand.Parameters.AddWithValue("@Name", txtEmpoyeeName.Text);
-    sqlCommand.Parameters.AddWithValue("@Gender", ddlEmpoyeeGender.SelectedValue);
-    sqlCommand.Parameters.AddWithValue("@Salary", txtEmpoyeeSalary.Text);
+    sqlCommand.Parameters.AddWithValue("@Name", "John");
+    sqlCommand.Parameters.AddWithValue("@Gender", "Male");
+    sqlCommand.Parameters.AddWithValue("@Salary", 50);
 
     SqlParameter outputParameter = new SqlParameter();
     outputParameter.ParameterName = "@EmployeeID";
@@ -81,9 +81,9 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("spAddEmployee", sqlConnection);
     sqlDataAdapter.SelectCommand.CommandType = System.Data.CommandType.StoredProcedure;
-    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Name", txtEmpoyeeName.Text);
-    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Gender", ddlEmpoyeeGender.SelectedValue);
-    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Salary", txtEmpoyeeSalary.Text);
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Name", "John");
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Gender", "Male");
+    sqlDataAdapter.SelectCommand.Parameters.AddWithValue("@Salary", 100);
 
     SqlParameter outputParameter = new SqlParameter();
     outputParameter.ParameterName = "@EmployeeID";
@@ -181,8 +181,6 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("Select * From Employee; Select * From Department", sqlConnection);
 
-    sqlConnection.Open();
-
     DataSet dataSet = new DataSet();
     sqlDataAdapter.Fill(dataSet);
 
@@ -205,8 +203,6 @@ if (Cache["Employees"] == null)
     using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     {
         SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("Select * From Employee", sqlConnection);
-
-        sqlConnection.Open();
 
         DataSet dataSet = new DataSet();
         sqlDataAdapter.Fill(dataSet);
@@ -233,8 +229,6 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     string sqlQuery = "Select * From Employee";
     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
 
-    sqlConnection.Open();
-
     DataSet dataSet = new DataSet();
     sqlDataAdapter.Fill(dataSet, "Employees");
 
@@ -254,8 +248,6 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     string sqlQuery = "Select * From Employee";
     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
 
-    sqlConnection.Open();
-
     DataSet dataSet = new DataSet();
     sqlDataAdapter.Fill(dataSet, "Employees");
 
@@ -264,7 +256,7 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     dataRow["Salary"] = 5;
     dataRow["Gender"] = "Male";
 
-    dataSet.Tables["Employees"].Rows.Add(dataRow);
+    dataSet.Tables["Employees"].Rows.Add(dataRow); // Insert
 
     SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
     int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
@@ -281,13 +273,11 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     string sqlQuery = "Select * From Employee";
     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
 
-    sqlConnection.Open();
-
     DataSet dataSet = new DataSet();
     sqlDataAdapter.Fill(dataSet, "Employees");
 
     DataRow dataRow = dataSet.Tables["Employees"].Rows[0];
-    dataRow.Delete();
+    dataRow.Delete(); // Delete
 
     SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
     int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
