@@ -261,8 +261,6 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
     int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
 
-    string updateCommand = sqlCommandBuilder.GetUpdateCommand().CommandText;
-
     GridView1.DataSource = dataSet.Tables["Employees"];
     GridView1.DataBind();
 }
@@ -281,8 +279,6 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 
     SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
     int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
-
-    string updateCommand = sqlCommandBuilder.GetUpdateCommand().CommandText;
 
     GridView1.DataSource = dataSet.Tables["Employees"];
     GridView1.DataBind();
