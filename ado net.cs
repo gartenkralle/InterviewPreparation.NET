@@ -224,3 +224,25 @@ else
     GridView1.DataSource = (DataTable)Cache["Employees"];
     GridView1.DataBind();
 }
+
+//SqlCommandBuilder
+//generates Insert, Update, Delete statements based on the Select statement for a single table
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    string sqlQuery = "Select * From Employee";
+    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
+
+    sqlConnection.Open();
+
+    DataSet dataSet = new DataSet();
+    sqlDataAdapter.Fill(dataSet, "Employees");
+
+    DataRow row = dataSet.Tables["Employees"].Rows[0];
+    row["Salary"] = 20; // Change
+
+    SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
+    int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
+
+    GridView1.DataSource = dataSet.Tables["Employees"];
+    GridView1.DataBind();
+}
