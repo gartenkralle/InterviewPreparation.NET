@@ -227,6 +227,7 @@ else
 
 //SqlCommandBuilder
 //generates Insert, Update, Delete statements based on the Select statement for a single table
+//Change TableRow of DataSet + Update call results in an Update command
 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     string sqlQuery = "Select * From Employee";
@@ -237,8 +238,8 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     DataSet dataSet = new DataSet();
     sqlDataAdapter.Fill(dataSet, "Employees");
 
-    DataRow row = dataSet.Tables["Employees"].Rows[0];
-    row["Salary"] = 20; // Change
+    DataRow dataRow = dataSet.Tables["Employees"].Rows[0];
+    dataRow["Salary"] = 20; // Change
 
     SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
     int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
@@ -246,3 +247,54 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     GridView1.DataSource = dataSet.Tables["Employees"];
     GridView1.DataBind();
 }
+
+//Insert TableRow in DataSet + Update call results in an Insert command
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    string sqlQuery = "Select * From Employee";
+    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
+
+    sqlConnection.Open();
+
+    DataSet dataSet = new DataSet();
+    sqlDataAdapter.Fill(dataSet, "Employees");
+
+    DataRow dataRow = dataSet.Tables["Employees"].NewRow();
+    dataRow["Name"] = "Heinz";
+    dataRow["Salary"] = 5;
+    dataRow["Gender"] = "Male";
+
+    dataSet.Tables["Employees"].Rows.Add(dataRow);
+
+    SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
+    int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
+
+    string updateCommand = sqlCommandBuilder.GetUpdateCommand().CommandText;
+
+    GridView1.DataSource = dataSet.Tables["Employees"];
+    GridView1.DataBind();
+}
+
+//Delete TableRow from DataSet + Update call results in an Delete command
+using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    string sqlQuery = "Select * From Employee";
+    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlQuery, sqlConnection);
+
+    sqlConnection.Open();
+
+    DataSet dataSet = new DataSet();
+    sqlDataAdapter.Fill(dataSet, "Employees");
+
+    DataRow dataRow = dataSet.Tables["Employees"].Rows[0];
+    dataRow.Delete();
+
+    SqlCommandBuilder sqlCommandBuilder = new SqlCommandBuilder(sqlDataAdapter);
+    int rowsUpdatedCount = sqlDataAdapter.Update(dataSet, "Employees"); // Update
+
+    string updateCommand = sqlCommandBuilder.GetUpdateCommand().CommandText;
+
+    GridView1.DataSource = dataSet.Tables["Employees"];
+    GridView1.DataBind();
+}
+
