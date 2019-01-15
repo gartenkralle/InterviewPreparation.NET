@@ -284,3 +284,74 @@ using (SqlConnection sqlConnection = new SqlConnection(connectionString))
     GridView1.DataBind();
 }
 
+// Usefull stated and functions:
+
+// DataRowState.Detached
+// DataRowState.Unchanged
+// DataRowState.Added
+// DataRowState.Deleted
+// DataRowState.Modified
+// dataRow.RowState.ToString();
+
+// dataSet.HasChanges();
+// dataTable.HasChanges();
+// dataRow.HasChanges();
+
+// AcceptChanges and RejectChanges to efficiently implement undo/redo of in memory data set
+
+// dataSet.AcceptChanges();
+// dataSet.RejectChanges();
+
+// dataTable.AcceptChanges();
+// dataTable.RejectChanges();
+
+// dataRow.AcceptChanges();
+// dataRowRejectChanges();
+
+
+// Untyped typed data set:
+
+// restricted intelli sense
+// restricted compile-time error checking 
+// Run-time errors possible (use of dataTable["errorProneString"], dataRow["errorProneString"])
+
+// Strongly typed data set:
+
+// Intelli sense
+// Compile-time error checking
+// DataSet needs to be created through designer
+
+EmployeeDataSetTableAdapters.EmployeeTableAdapter employeeTableAdapter = new EmployeeDataSetTableAdapters.EmployeeTableAdapter();
+EmployeeDataSet employeeDataSet = new EmployeeDataSet();
+
+employeeTableAdapter.Fill(employeeDataSet.Employee);
+
+foreach (EmployeeDataSet.EmployeeRow employeeRow in employeeDataSet.Employee)
+{
+    int ID = employeeRow.ID;
+    string Name = employeeRow.Name;
+    string Gender = employeeRow.Gender;
+}
+
+GridView1.DataSource = employeeDataSet;
+GridView1.DataBind();
+
+
+//SqlBulkCopy
+using(SqlConnection sqlConnection = new SqlConnection(connectionString))
+{
+    DataSet dataSet = new DataSet();
+    ds.Read(Server.MapPath("~/Data.xml"));
+
+    DataTable employeeDataTable = dataSet.Tables["Employee"];
+
+    sqlConnection.Open();
+
+    using(SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(sqlConnection))
+    {
+        sqlBulkCopy.DestinationTableName = "Employees";
+        sqlBulkCopy.ColumnMappings.Add("ID", "ID");
+        sqlBulkCopy.ColumnMappings.Add("Name", "Name");
+        sqlBulkCopy.WriteToServer(employeeDataTable);
+    }
+}
