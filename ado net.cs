@@ -10,6 +10,11 @@
 //Typos result in runtime errors, not compile time errors (on client side)
 //Transfering SqlCommand to sql server generates more network traffic than stored procedures or functions
 
+// SqlDataReader vs. SqlDataAdapter:
+
+//SqlDataReader requires an active and open connection to the data source (very fast)
+//SqlDataAdapter requires NO active and open connection to the data source (less performance)
+
 //First Example
 protected void Page_Load(object sender, EventArgs e)
 {
@@ -337,7 +342,7 @@ GridView1.DataSource = employeeDataSet;
 GridView1.DataBind();
 
 
-//SqlBulkCopy
+//SqlBulkCopy (write data from xml file to sql data base)
 using(SqlConnection sqlConnection = new SqlConnection(connectionString))
 {
     DataSet dataSet = new DataSet();
