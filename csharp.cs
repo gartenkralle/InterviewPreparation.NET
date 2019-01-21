@@ -74,8 +74,8 @@ int.Parse(null);                 // throws exception
 
 /* Cast vs. as */
 
-int res = (int)number;           // doesn't throw an exception, only works for value types
-Vehicle v = car as Vehicle       // doesn't throw an exception, only works for reference types
+int res = (int)number;           // throws InvalidCastException
+Vehicle v = car as Vehicle       // assign null if not convertable, only works for reference types
 
 /* Convert.ToString() vs object.ToString() */
 
