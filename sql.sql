@@ -17,9 +17,9 @@ Create Table Person
 (
 	[ID] int NOT NULL Identity Primary Key, --'Identity' implicitly creates the primary key
 	[Name] nvarchar(50) NOT NULL,
-    [Email] nvarchar(50) NOT NULL,
+    	[Email] nvarchar(50) NOT NULL,
 	[Age] int NULL,
-    [GenderId] int NULL
+    	[GenderId] int NULL
 )
 
 Create Table Gender
