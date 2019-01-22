@@ -45,27 +45,19 @@ sealed class Singleton
 }
 
 // Lazy loading (with Lazy class)
-class Program
+using System;
+
+sealed class Singleton
 {
-    static void Main(string[] args)
+    private Singleton() { }
+    private static readonly Lazy<Singleton> instance = new Lazy<Singleton>(() => new Singleton());
+
+    public static Singleton Instance
     {
-        Lazy<Foo> foo = new Lazy<Foo>();
-        int? id = null;
-
-        if (!foo.IsValueCreated)
-            id = (foo.Value as Foo).ID;
-
-        Console.WriteLine(id);
-    }
-}
-
-sealed class Foo
-{
-    public int ID { get; set; }
-
-    public Foo()
-    {
-        ID = 1;
+        get
+        {
+            return instance.Value;
+        }
     }
 }
 
