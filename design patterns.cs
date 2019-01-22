@@ -64,4 +64,4 @@ sealed class Singleton
 
 /* Singleton vs. Static class */
 
-// A singleton can inherit from interfaces or an base class, a static class not
+// A singleton can inherit from interfaces or a base class, a static class cannot
