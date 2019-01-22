@@ -19,7 +19,7 @@ Create Table Person
 	[Name] nvarchar(50) NOT NULL,
     [Email] nvarchar(50) NOT NULL,
 	[Age] int NULL,
-    [GenderId] int NULL 
+    [GenderId] int NULL
 )
 
 Create Table Gender
