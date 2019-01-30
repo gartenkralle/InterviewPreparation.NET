@@ -8,11 +8,11 @@ https://v2.angular.io/docs/ts/latest/api/core/index/Component-decorator.html
 import { Component } from "@angular/core"
 
 //app.component.ts
-@Component({
+@Component({ // decorator
   selector: 'my-app',
-  templateUrl: 'app/app.component.html'
+  templateUrl: 'app/app.component.html' // template
 })
-export class AppComponent {
+export class AppComponent { // class
   name: string = "Angular";
 }
 
